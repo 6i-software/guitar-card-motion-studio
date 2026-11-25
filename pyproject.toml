@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gcstudio"
+version = "0.0.1"
+description = "Desktop app that turns a Guitar Card and an audio track into a synchronized video."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "PySide6",
+    "numpy",
+    "scipy",
+    "librosa>=1.0,<2",
+    "soundfile",
+    "Pillow",
+    "opencv-python-headless",
+    "pydantic>=2,<3",
+    "matplotlib>=3.11,<4",
+]
+
+[project.optional-dependencies]
+# Demucs pulls PyTorch: installed on demand only, never by default.
+ml = ["demucs"]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-qt",
+    "pytest-cov",
+    "hypothesis",
+    "ruff",
+    "mypy",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gcstudio"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+extend-exclude = [".venv", ".worktrees", "docs", ".opencode"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src/gcstudio/core"]
+mypy_path = "src"
+warn_unreachable = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+qt_api = "pyside6"
+markers = [
+    "slow: tests that need ffmpeg, Demucs or long audio fixtures",
+]
+
+[tool.coverage.run]
+source = ["gcstudio.core"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]

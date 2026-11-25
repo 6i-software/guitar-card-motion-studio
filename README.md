@@ -2,7 +2,7 @@
 
 Application desktop nomade (Windows, macOS, Linux) qui transforme une **Guitar Card** et une piste audio en **vidéo synchronisée** : surbrillance du motif actif, annonce du motif suivant, compteurs de répétition, sans altérer les pixels hors de la zone des motifs (ROI).
 
-> **État :** cadre de développement adopté (2026-11-25). Le scaffold M0 (T-0001) démarre.
+> **État :** cadre de développement adopté (2026-11-25) ; scaffold M0 en place (T-0001).
 > **Dépôt :** [github.com/6i-software/guitar-card-motion-studio](https://github.com/6i-software/guitar-card-motion-studio)
 
 ---
@@ -38,16 +38,28 @@ Application desktop nomade (Windows, macOS, Linux) qui transforme une **Guitar C
 | Itérations | `docs/plan/ITERATIONS.md` |
 | Board | `docs/status/BOARD.md` |
 
-## 3. Démarrage (après M0)
+## 3. Démarrage
+
+Prérequis : [`uv`](https://docs.astral.sh/uv/) et Python 3.12 (épinglé par `.python-version`).
 
 ```bash
-uv sync
-uv run python -m gcstudio
-uv run pytest -m "not slow"
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src/gcstudio/core
+uv sync                       # crée .venv, installe runtime + outils dev
+uv run python -m gcstudio     # ouvre la fenêtre « Guitar Card AI-Motion Studio »
+uv run pytest                 # tests unitaires (Qt en mode offscreen)
+uv run ruff check .           # lint
+uv run ruff format --check .  # formatage
+uv run mypy src/gcstudio/core # typage strict du cœur pur
 ```
+
+Options :
+
+```bash
+uv sync --extra ml            # ajoute Demucs (PyTorch), non installé par défaut
+uv run pytest -m "not slow"   # exclut les tests lents (ffmpeg, Demucs)
+uv run pytest --cov=gcstudio.core --cov-report=term-missing
+```
+
+La fenêtre n'est qu'un point de départ : la logique métier arrive avec les vagues suivantes.
 
 ## 4. Workflow Git
 
