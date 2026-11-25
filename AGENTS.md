@@ -1,9 +1,8 @@
 # AGENTS.md — Guitar Card AI-Motion Studio
 
-> **Version :** 2.1 (adoptée, 2026-11-25) — cadre complet, GitHub et conventions de commit.
-> **Remplace :** la v1 (non conservée dans ce dépôt ; voir `D3`).
+> **Version :** 2.1 (adoptée, 2026-11-25) 
 > **Portée :** tout agent IA ou humain qui lit, modifie, teste ou livre ce dépôt.
-> **Règle d'or :** une session = une tâche = un rapport. Pas de tâche, pas de code.
+> **Règle d'or :** une session = un rapport. Pas de tâche, pas de code.
 
 ## 1. Mission
 
