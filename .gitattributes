@@ -1,0 +1,25 @@
+# Normalisation des fins de ligne (cross-platform)
+* text=auto
+
+*.py       text eol=lf
+*.md       text eol=lf
+*.json     text eol=lf
+*.jsonc    text eol=lf
+*.toml     text eol=lf
+*.yml      text eol=lf
+*.yaml     text eol=lf
+*.sh       text eol=lf
+*.bat      text eol=crlf
+*.ps1      text eol=crlf
+
+# Binaires
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.webp     binary
+*.mp3      binary
+*.wav      binary
+*.flac     binary
+*.m4a      binary
+*.mp4      binary
+*.ico      binary

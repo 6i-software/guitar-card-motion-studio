@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# uv
+.uv/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Build / output
+build/
+dist/
+*.spec
+*.log
+output/
+
+# Binaires et modèles (préparés au build, hors Git)
+binaries/
+models/
+!binaries/.gitkeep
+!models/.gitkeep
+
+# Worktrees d'agents
+.worktrees/
+
+# Rapports temporaires
+docs/reports/attachments/*.tmp
+
+# Exemples protégés — hors Git (D8)
+# Les MP3/PNG réels restent locaux ; la CI utilise tests/fixtures/.
+docs/examples/**/MP3/
+docs/examples/**/PNG/
+docs/examples/**/*.mp3
+docs/examples/**/*.wav
+docs/examples/**/*.flac
+docs/examples/**/*.m4a
+docs/examples/**/*.mp4
+docs/examples/**/*.png
+docs/examples/**/*.jpg
+docs/examples/**/*.jpeg
+docs/examples/**/*.webp
