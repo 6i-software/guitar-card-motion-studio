@@ -20,6 +20,8 @@ class _QtBlocker:
     def find_spec(self, fullname, path=None, target=None):
         if fullname == "PySide6" or fullname.startswith("PySide6."):
             raise ImportError(f"PySide6 is forbidden in gcstudio.core: {fullname}")
+        if fullname == "gcstudio.ui" or fullname.startswith("gcstudio.ui."):
+            raise ImportError(f"gcstudio.ui is forbidden in gcstudio.core: {fullname}")
         return None
 
 
@@ -27,6 +29,16 @@ sys.meta_path.insert(0, _QtBlocker())
 import gcstudio.core
 
 assert "PySide6" not in sys.modules
+assert "gcstudio.ui" not in sys.modules
+
+
+# A dynamic import of the UI layer from this process must also fail.
+try:
+    import gcstudio.ui
+except ImportError:
+    pass
+else:
+    raise SystemExit("gcstudio.ui must not be importable from a core-only process")
 """
 
 

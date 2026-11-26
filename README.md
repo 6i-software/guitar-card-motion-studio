@@ -4,9 +4,9 @@
 
 Guitar Card AI-Motion Studio est une application de bureau (Windows, macOS, Linux) qui transforme une **Guitar Card** — une partition simplifiée faite de motifs et de répétitions — et un enregistrement audio en une **vidéo animée** : le motif en cours est mis en évidence, le motif suivant est annoncé, et les répétitions sont comptées.
 
-L'application fonctionne **hors ligne**, en **français par défaut**, et ne modifie que la zone des motifs : le reste de l'image reste strictement identique à l'original.
+L'application fonctionne **hors ligne**, en **français par défaut**, et ne modifie que la zone des motifs : hors fondu global d'entrée/sortie explicitement activé, le reste de l'image reste identique à l'original.
 
-> **État du projet :** le socle technique est en place et la fenêtre de démarrage s'ouvre. L'import, l'analyse audio, la synchronisation et le rendu vidéo sont en cours de développement.
+> **État du projet :** le socle technique est en place et la fenêtre de démarrage s'ouvre. L'import, l'analyse audio, la synchronisation et le rendu vidéo sont prévus dans les prochaines versions.
 
 ---
 
@@ -19,6 +19,8 @@ L'application fonctionne **hors ligne**, en **français par défaut**, et ne mod
 - [Développement](#développement)
 - [Documentation](#documentation)
 - [Contribuer](#contribuer)
+- [Licence](#licence)
+- [Données et licences](#données-et-licences)
 
 ## Le problème
 
@@ -61,7 +63,7 @@ Pour en faire une vidéo de pratique, il faut suivre l'audio, retrouver le débu
 
 ## État du projet
 
-| Disponible aujourd'hui | En cours de développement |
+| Disponible aujourd'hui | À venir |
 |---|---|
 | Fenêtre de démarrage PySide6 | Import image et audio |
 | Socle `core/` sans dépendance Qt | Analyse de la ROI et grammaire |
@@ -75,7 +77,7 @@ Les fonctionnalités ci-dessus décrivent la cible du produit ; elles ne sont pa
 
 - [`uv`](https://docs.astral.sh/uv/) pour gérer Python et les dépendances
 - Python 3.12 (installé automatiquement par `uv` si besoin)
-- `ffmpeg` / `ffprobe` pour le rendu vidéo (à venir)
+- `ffmpeg` / `ffprobe` pour le développement et les tests ; les versions distribuées embarqueront les binaires, donc aucun prérequis pour l'utilisateur final
 
 ### Lancer l'application
 
@@ -88,16 +90,21 @@ uv run python -m gcstudio
 
 Une fenêtre « Guitar Card AI-Motion Studio » s'ouvre.
 
-Si `uv` n'est pas disponible dans votre terminal, le venv créé par `uv sync` suffit :
+Après `uv sync`, vous pouvez aussi lancer l'application directement avec le Python du venv :
 
 ```powershell
-.\.venv\Scripts\python.exe -m gcstudio   # Windows
-.venv/bin/python -m gcstudio             # macOS / Linux
+# Windows
+.\.venv\Scripts\python.exe -m gcstudio
 ```
 
-### Séparation de sources (optionnel)
+```bash
+# macOS / Linux
+.venv/bin/python -m gcstudio
+```
 
-Demucs et PyTorch ne sont pas installés par défaut (plusieurs centaines de Mo) :
+### Séparation de sources (optionnelle)
+
+Demucs et PyTorch ne sont pas installés par défaut (plusieurs centaines de Mo à quelques Go) :
 
 ```bash
 uv sync --extra ml
@@ -122,7 +129,7 @@ uv run pytest --cov=gcstudio.core --cov-report=term-missing
 
 ```text
 src/gcstudio/
-├── core/       # logique pure : grammaire, modèle, audio, synchro, rendu
+├── core/       # logique pure du produit (modules à venir : grammaire, modèle, audio, synchro, rendu)
 ├── services/   # orchestration, workers, chemins, logging (à venir)
 └── ui/         # fenêtres et composants PySide6
 ```
@@ -140,10 +147,12 @@ src/gcstudio/
 | Interface et projets | [`docs/specs/spec-ui-project.md`](docs/specs/spec-ui-project.md) |
 | Rendu vidéo | [`docs/specs/spec-render-video.md`](docs/specs/spec-render-video.md) |
 | YouTube | [`docs/specs/spec-youtube.md`](docs/specs/spec-youtube.md) |
+| Décisions produit | [`docs/DECISIONS.md`](docs/DECISIONS.md) |
+| Questions ouvertes | [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md) |
 
 ## Contribuer
 
-Les contributions sont bienvenues via les issues et les pull requests. Avant de proposer un changement, consultez la spec du domaine concerné et vérifiez que les tests et le lint passent :
+Les contributions sont bienvenues via les issues et les pull requests. Avant de proposer un changement, consultez la spec du domaine concerné et vérifiez que les tests, le lint et le typage passent :
 
 ```bash
 uv run pytest
@@ -156,6 +165,12 @@ uv run mypy src/gcstudio/core
 
 La licence du projet n'est pas encore définie.
 
+## Données et licences
+
+- Ne commettez jamais de secret, de token ou de donnée personnelle dans le dépôt.
+- N'ajoutez pas de musique ou d'artwork protégé : les exemples locaux restent hors du dépôt.
+- Les licences des bibliothèques et binaires tiers seront documentées dans `THIRD_PARTY_LICENSES.md`.
+
 ---
 
-**Vos images et vos audios restent sur votre machine.** Aucun envoi vers un service externe n'est effectué par l'application.
+**Vos images et vos fichiers audio restent sur votre machine.** Aucun envoi vers un service externe n'est effectué par l'application.

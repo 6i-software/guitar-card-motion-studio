@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow
 
 WINDOW_TITLE = "Guitar Card AI-Motion Studio"
@@ -27,11 +27,17 @@ def create_application(argv: list[str] | None = None) -> QApplication:
     """Return the current ``QApplication`` or create one.
 
     Keeping the instance out of a module-level global lets tests build and tear
-    down the application explicitly.
+    down the application explicitly. This assumes no non-GUI ``QCoreApplication``
+    exists yet: only a ``QApplication`` can be returned or created here.
     """
     existing = QApplication.instance()
     if isinstance(existing, QApplication):
         return existing
+    if QCoreApplication.instance() is not None:
+        raise RuntimeError(
+            "A Qt core application already exists; call create_application() "
+            "from a process without one, or reuse the existing QApplication."
+        )
     return QApplication(sys.argv if argv is None else argv)
 
 

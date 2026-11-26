@@ -41,6 +41,8 @@ packages = ["src/gcstudio"]
 target-version = "py312"
 line-length = 100
 src = ["src", "tests"]
+# ruff format 0.17+ formate les blocs de code Python des fichiers Markdown :
+# docs/ et .opencode/ sont exclus pour ne pas toucher aux specs/contrats gelés.
 extend-exclude = [".venv", ".worktrees", "docs", ".opencode"]
 
 [tool.ruff.lint]
