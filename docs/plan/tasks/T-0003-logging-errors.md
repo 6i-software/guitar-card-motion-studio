@@ -10,6 +10,7 @@ blocks: [T-0004]
 files_owned:
   - src/gcstudio/core/errors.py
   - src/gcstudio/core/logging.py
+  - src/gcstudio/services/__init__.py
   - src/gcstudio/services/logging.py
   - src/gcstudio/services/paths.py
   - tests/unit/test_errors.py
