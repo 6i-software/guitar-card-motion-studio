@@ -1,6 +1,6 @@
 # Board — Guitar Card AI-Motion Studio
 
-> **Mis à jour :** 2026-11-25 (cadre complet adopté, GitHub connecté, W0.1 prêt à démarrer)
+> **Mis à jour :** 2026-11-26 (T-0001 mergé, W0.1 en cours)
 > **WIP limit :** 3 implémenteurs + 1 QA + 1 reviewer
 > **Règle :** seul l'orchestrateur modifie ce fichier.
 
@@ -10,7 +10,8 @@
 
 | ID | Titre | Rôle | Branche | Depuis | Rapport |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| T-0002 | Gates locales + `scripts/ci.py` | integrator | `task/T-0002-quality-gates` | 2026-11-26 | — |
+| T-0003 | Erreurs + logging | platform-dev | `task/T-0003-logging-errors` | 2026-11-26 | — |
 
 ## 2. En review / vérification
 
@@ -22,23 +23,19 @@
 
 | ID | Titre | Rôle | Dépend | Task card |
 |---|---|---|---|---|
-| T-0001 | Scaffold uv + hello world | platform-dev | — | `docs/plan/tasks/T-0001-scaffold.md` |
-| T-0002 | Gates locales + `scripts/ci.py` | integrator | T-0001 | `docs/plan/tasks/T-0002-quality-gates.md` |
-| T-0003 | Erreurs + logging | platform-dev | T-0001 | `docs/plan/tasks/T-0003-logging-errors.md` |
-| T-0004 | Contrat grammar v0.2 | spec-analyst | T-0001 | `docs/plan/tasks/T-0004-grammar-contract.md` |
 | T-0005 | Lexer | core-dev | T-0004 | `docs/plan/tasks/T-0005-lexer.md` |
 
 ## 4. Bloqué
 
 | ID | Titre | Blocage | Question | Depuis |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| T-0004 | Contrat grammar v0.2 | Q3 + Q8 ouvertes (arbitrage humain requis, `human_gate: true`) | Q3 : `¦`/`\|` sans case (motif générique vs marqueur) ; Q8 : compteurs de groupe (`inner`/`outer` vs `group_path`) | 2026-11-26 |
 
 ## 5. Terminé (7 derniers jours)
 
 | ID | Titre | Rôle | Merge | Rapport |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| T-0001 | Scaffold uv + hello world | platform-dev | `97d1439` (PR #1) | `docs/reports/tasks/R-T-0001-20261125.md` |
 
 ---
 
@@ -48,7 +45,7 @@
 
 | ID | Sujet | Impact | Recommandation |
 |---|---|---|---|
-| — | — | — | — |
+| Q3 / Q8 | Grammar T-0004 : `¦`/`\|` sans case ; compteurs de groupe | Contrat v0.2, lexer (T-0005) | Q3 : motif générique + `motif_key` stable ; Q8 : `group_path` riche avec `GroupRef` typé |
 
 ### Résolues
 
@@ -64,12 +61,12 @@
 | H-0008 | Q4/Q7/Q35 | `D12` + `D15` : `Punk2` = nom, `a` = motif distinct, `A^n` canonique | 2026-11-25 |
 | H-0009 | Git workflow | `D6` + `D13` : branche `task/*`, PR, merge commit | 2026-11-25 |
 | H-0010 | Langues/commits | `D14` : docs FR, code/commits EN, gitmoji obligatoire | 2026-11-25 |
+| H-0011 | Force push | `D16` : `git push --force*` / `-f*` en `ask` (confirmation humaine), garde-fous tags/reset conservés | 2026-11-26 |
 
 ---
 
 ## 7. Prochaine action
 
-1. Finaliser le commit bootstrap et pousser `main` sur GitHub.
-2. Lancer W0.1 : T-0001 (platform-dev) sur `task/T-0001-scaffold`, puis T-0002 (integrator) et T-0003 (platform-dev).
-3. Review + PR pour chaque tâche ; merge commit après gates.
-4. Détailer W1.1 après la démo M0.
+1. Implémenter T-0002 (integrator) et T-0003 (platform-dev) en parallèle ; review + PR + merge commit pour chacune.
+2. Arbitrer Q3/Q8 avec l'humain pour débloquer T-0004 (contrat grammar v0.2), puis lancer T-0005 (lexer).
+3. Détailer W1.1 après la démo M0.
