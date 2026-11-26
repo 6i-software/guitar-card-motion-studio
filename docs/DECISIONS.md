@@ -222,3 +222,25 @@
   3. Les autres garde-fous restent inchangés : push direct sur `main` en `ask`, tags et `git reset --hard` en `deny`.
 - **Conséquences :** Les corrections d'historique validées restent possibles, au prix d'une confirmation à chaque fois. Le risque d'écrasement accidentel reste couvert.
 - **Alternatives écartées :** Garder `deny` (bloque les corrections validées) ; passer à `allow` (trop permissif).
+
+---
+
+## #D17 — `¦` / `|` sans numéro de case = motif générique (2026-11-26)
+- **Statut :** Adopté
+- **Contexte :** `Q3` — spec grammar §2. Sur une Guitar Card, `¦` (arpège) ou `|` (barré) peut apparaître sans numéro de case. L'utilisateur a tranché le 2026-11-26.
+- **Décision :**
+  1. `¦` (arpège) et `|` (barré) **sans numéro de case représentent un motif générique / une case non précisée** : rendu générique ou reprise de la dernière case connue dans la ROI.
+  2. Ils conservent un `motif_key` **stable** : `¦` et `|` (avec `¦4`/`|4` pour les numéros de case, cf. `D15`).
+- **Conséquences :** Le parseur n'émet pas d'erreur pour `¦`/`|` sans case ; le modèle du token et l'animation ROI traitent un motif générique ; les golden couvrent ce cas.
+- **Alternatives écartées :** Traitement en marqueur de structure/séparation avec rendu distinct dans la ROI (option 2 de `Q3`).
+
+---
+
+## #D18 — Compteurs de groupe : `group_path` riche (2026-11-26)
+- **Statut :** Adopté
+- **Contexte :** `Q8` — `Occurrence` porte `repetition_index/total` et `group_path`, mais `{5A BB}x2` cumule les 5 pips de `5A` et les 2 pips du `x2`. L'utilisateur a tranché le 2026-11-26.
+- **Décision :**
+  1. Chaque `GroupRef` du `group_path` porte `repetition_index` / `repetition_total`.
+  2. L'UI affiche par défaut le groupe **le plus interne** ; les compteurs plus externes restent disponibles (affichage, chapitres YouTube).
+- **Conséquences :** Le modèle `group_path` est une liste typée de `GroupRef` ; l'affichage des compteurs imbriqués se généralise à des groupes profonds.
+- **Alternatives écartées :** Champs dédiés `inner_repetition` / `outer_repetition` sur `Occurrence` (option 2 de `Q8`) — limités à deux niveaux.
