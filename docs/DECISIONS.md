@@ -210,3 +210,15 @@
   6. **Clés** : `motif_key` = graphie canonique (`A`, `a`, `A^1`, `A^2`, `A^2~`, `Punk2`, `|4`) ; `family_key` = motif de base (`A` pour `a`, `A^1`, `A^2` ; `Punk2` pour lui-même).
 - **Conséquences :** Le lexer distingue nom, multiplicateur et exposant ; le parser normalise `#`/`##` ; le modèle peut regrouper les variantes sans les confondre.
 - **Alternatives écartées :** Traiter `Punk2` comme `Punk` × 2 (ambigu avec `Solo1`) ; fusionner `a` dans `A` (perte de la distinction de riff) ; combiner `~` et `^n` (notation trop complexe).
+
+---
+
+## #D16 — Force push soumis à confirmation (2026-11-26)
+- **Statut :** Adopté
+- **Contexte :** Le bootstrap a nécessité une réécriture d'historique validée par l'humain. La configuration interdisait (`deny`) tout `git push --force*` / `-f*`, ce qui empêchait même une correction explicitement approuvée.
+- **Décision :**
+  1. Les commandes `git push --force*` et `git push -f*` passent de `deny` à `ask` dans `opencode.jsonc`.
+  2. Chaque force push reste soumis à une confirmation humaine explicite ; aucun force push automatique.
+  3. Les autres garde-fous restent inchangés : push direct sur `main` en `ask`, tags et `git reset --hard` en `deny`.
+- **Conséquences :** Les corrections d'historique validées restent possibles, au prix d'une confirmation à chaque fois. Le risque d'écrasement accidentel reste couvert.
+- **Alternatives écartées :** Garder `deny` (bloque les corrections validées) ; passer à `allow` (trop permissif).
