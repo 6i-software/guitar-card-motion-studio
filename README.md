@@ -1,91 +1,161 @@
 # Guitar Card AI-Motion Studio
 
-Application desktop nomade (Windows, macOS, Linux) qui transforme une **Guitar Card** et une piste audio en **vidéo synchronisée** : surbrillance du motif actif, annonce du motif suivant, compteurs de répétition, sans altérer les pixels hors de la zone des motifs (ROI).
+**Une Guitar Card, une piste audio, une vidéo de pratique synchronisée.**
 
-> **État :** cadre de développement adopté (2026-11-25) ; scaffold M0 en place (T-0001).
-> **Dépôt :** [github.com/6i-software/guitar-card-motion-studio](https://github.com/6i-software/guitar-card-motion-studio)
+Guitar Card AI-Motion Studio est une application de bureau (Windows, macOS, Linux) qui transforme une **Guitar Card** — une partition simplifiée faite de motifs et de répétitions — et un enregistrement audio en une **vidéo animée** : le motif en cours est mis en évidence, le motif suivant est annoncé, et les répétitions sont comptées.
+
+L'application fonctionne **hors ligne**, en **français par défaut**, et ne modifie que la zone des motifs : le reste de l'image reste strictement identique à l'original.
+
+> **État du projet :** le socle technique est en place et la fenêtre de démarrage s'ouvre. L'import, l'analyse audio, la synchronisation et le rendu vidéo sont en cours de développement.
 
 ---
 
-## 1. Documentation
+## Sommaire
 
-| Sujet | Fichier |
+- [Le problème](#le-problème)
+- [Ce que fait l'application](#ce-que-fait-lapplication)
+- [État du projet](#état-du-projet)
+- [Démarrage](#démarrage)
+- [Développement](#développement)
+- [Documentation](#documentation)
+- [Contribuer](#contribuer)
+
+## Le problème
+
+Une Guitar Card est une partition de poche : une image avec quelques motifs (riffs) et une séquence de répétitions, par exemple :
+
+```text
+AA BBBB       deux fois A, puis quatre fois B
+2A 4B         la même chose, en version compacte
+{5A BB}x2     cinq A puis deux B, répétés deux fois
+```
+
+Pour en faire une vidéo de pratique, il faut suivre l'audio, retrouver le début de chaque motif, l'annoncer, compter les répétitions… et recommencer à chaque prise. C'est long, répétitif et source d'erreurs.
+
+## Ce que fait l'application
+
+**Préparer la carte**
+
+- Importer une image (PNG, JPG, WebP…) et un fichier audio (MP3, WAV, FLAC…).
+- Détecter la zone des motifs (ROI) et la couleur primaire de la carte, puis ajuster le cadrage à la main.
+- Saisir la séquence avec une grammaire tolérante : `A`, `A#`, `a`, `¦4`, `|4`, `{5A BB}x2`, `Punkx2`…
+
+**Synchroniser**
+
+- Analyser l'audio pour proposer un alignement entre les motifs et la musique.
+- Séparer la guitare du reste du mix (optionnel, via Demucs) pour affiner l'analyse.
+- Ajuster la timeline à la main : tap-to-sync, saisie numérique, verrouillage des points clés.
+- Lire les rapports d'analyse et les scores de confiance avant de valider.
+
+**Animer et vérifier**
+
+- Prévisualiser en temps réel : surbrillance du motif actif, annonce du suivant, compteurs de répétition.
+- Personnaliser les couleurs, le halo, les fondus et le délai d'anticipation.
+- Contrôler les diagnostics et les avertissements avant l'export.
+
+**Exporter**
+
+- Générer la vidéo finale avec l'audio synchronisé.
+- Exporter les chapitres horodatés et un bloc de description YouTube.
+- Sauvegarder et réutiliser les projets.
+
+## État du projet
+
+| Disponible aujourd'hui | En cours de développement |
 |---|---|
-| Vision produit | `docs/SPEC.md` |
-| Grammaire Guitar Card | `docs/specs/spec-grammar-guitar-card.md` |
-| Modèle de données | `docs/specs/spec-data-model.md` |
-| Image, audio, sync | `docs/specs/spec-audio-sequence-alignement.md` |
-| UI et projets | `docs/specs/spec-ui-project.md` |
-| Rendu vidéo | `docs/specs/spec-render-video.md` |
-| YouTube | `docs/specs/spec-youtube.md` |
-| Questions ouvertes | `docs/OPEN_QUESTIONS.md` |
-| Décisions | `docs/DECISIONS.md` |
-| Lacunes spec | `docs/plan/SPEC_GAPS.md` |
+| Fenêtre de démarrage PySide6 | Import image et audio |
+| Socle `core/` sans dépendance Qt | Analyse de la ROI et grammaire |
+| Outillage de qualité (ruff, mypy, pytest) | Analyse audio, synchronisation, rendu vidéo |
 
-## 2. Développement piloté par agents
+Les fonctionnalités ci-dessus décrivent la cible du produit ; elles ne sont pas toutes disponibles dans la version actuelle.
 
-| Sujet | Fichier |
-|---|---|
-| Constitution agents | `AGENTS.md` |
-| Playbook | `docs/agents/PLAYBOOK.md` |
-| Rôles | `docs/agents/ROLES.md` |
-| Propriété des fichiers | `docs/agents/OWNERSHIP.md` |
-| Gates | `docs/agents/QUALITY_GATES.md` |
-| Comptes rendus | `docs/agents/REPORTING.md` |
-| Commits et PR | `docs/agents/COMMITS.md` |
-| Roadmap | `docs/plan/ROADMAP.md` |
-| Backlog | `docs/plan/BACKLOG.md` |
-| Itérations | `docs/plan/ITERATIONS.md` |
-| Board | `docs/status/BOARD.md` |
+## Démarrage
 
-## 3. Démarrage
+### Prérequis
 
-Prérequis : [`uv`](https://docs.astral.sh/uv/) et Python 3.12 (épinglé par `.python-version`).
+- [`uv`](https://docs.astral.sh/uv/) pour gérer Python et les dépendances
+- Python 3.12 (installé automatiquement par `uv` si besoin)
+- `ffmpeg` / `ffprobe` pour le rendu vidéo (à venir)
+
+### Lancer l'application
 
 ```bash
-uv sync                       # crée .venv, installe runtime + outils dev
-uv run python -m gcstudio     # ouvre la fenêtre « Guitar Card AI-Motion Studio »
+git clone https://github.com/6i-software/guitar-card-motion-studio.git
+cd guitar-card-motion-studio
+uv sync
+uv run python -m gcstudio
+```
+
+Une fenêtre « Guitar Card AI-Motion Studio » s'ouvre.
+
+Si `uv` n'est pas disponible dans votre terminal, le venv créé par `uv sync` suffit :
+
+```powershell
+.\.venv\Scripts\python.exe -m gcstudio   # Windows
+.venv/bin/python -m gcstudio             # macOS / Linux
+```
+
+### Séparation de sources (optionnel)
+
+Demucs et PyTorch ne sont pas installés par défaut (plusieurs centaines de Mo) :
+
+```bash
+uv sync --extra ml
+```
+
+## Développement
+
+```bash
 uv run pytest                 # tests unitaires (Qt en mode offscreen)
 uv run ruff check .           # lint
 uv run ruff format --check .  # formatage
-uv run mypy src/gcstudio/core # typage strict du cœur pur
+uv run mypy src/gcstudio/core # typage strict du cœur
 ```
 
-Options :
+Pour mesurer la couverture du cœur :
 
 ```bash
-uv sync --extra ml            # ajoute Demucs (PyTorch), non installé par défaut
-uv run pytest -m "not slow"   # exclut les tests lents (ffmpeg, Demucs)
 uv run pytest --cov=gcstudio.core --cov-report=term-missing
 ```
 
-La fenêtre n'est qu'un point de départ : la logique métier arrive avec les vagues suivantes.
+### Organisation du code
 
-## 4. Workflow Git
+```text
+src/gcstudio/
+├── core/       # logique pure : grammaire, modèle, audio, synchro, rendu
+├── services/   # orchestration, workers, chemins, logging (à venir)
+└── ui/         # fenêtres et composants PySide6
+```
 
-- Une tâche = une branche `task/T-XXXX-slug`, une PR vers `main`, une review approuvée, un **merge commit**.
-- Aucun commit direct sur `main` (exception : bootstrap initial).
-- Commits en anglais avec **gitmoji** + Conventional Commits et `Refs: T-XXXX` : voir `docs/agents/COMMITS.md`.
-- Seul l'intégrateur écrit dans Git ; il pousse les branches `task/*` et ouvre les PR, jamais `main`.
+`core/` ne dépend ni de Qt ni de `ui/` : il se teste sans interface graphique.
 
-## 5. Prérequis de développement
+## Documentation
 
-- **`uv`** 0.13.10 ou plus récent (gestion des dépendances et de Python).
-- **Python 3.12** géré par `uv` (3.12.16 installé le 2026-11-25). C'est le minimum imposé par `librosa` 1.x, `numpy` et `scipy` récents ; ne pas utiliser Python 3.14 (compatibilité PyTorch/Demucs non garantie).
-- **ffmpeg/ffprobe** disponibles pour les tests d'intégration (ou binaires embarqués plus tard).
-- Espace disque suffisant pour PyTorch + poids Demucs (plusieurs centaines de Mo à quelques Go).
+| Sujet | Fichier |
+|---|---|
+| Vision produit | [`docs/SPEC.md`](docs/SPEC.md) |
+| Grammaire Guitar Card | [`docs/specs/spec-grammar-guitar-card.md`](docs/specs/spec-grammar-guitar-card.md) |
+| Modèle de données | [`docs/specs/spec-data-model.md`](docs/specs/spec-data-model.md) |
+| Image, audio et synchronisation | [`docs/specs/spec-audio-sequence-alignement.md`](docs/specs/spec-audio-sequence-alignement.md) |
+| Interface et projets | [`docs/specs/spec-ui-project.md`](docs/specs/spec-ui-project.md) |
+| Rendu vidéo | [`docs/specs/spec-render-video.md`](docs/specs/spec-render-video.md) |
+| YouTube | [`docs/specs/spec-youtube.md`](docs/specs/spec-youtube.md) |
 
-> Environnement au 2026-11-25 : `uv` 0.13.10 et Python 3.12.16 installés. Le projet n'est pas encore scaffoldé (T-0001).
+## Contribuer
 
-## 6. Principes
+Les contributions sont bienvenues via les issues et les pull requests. Avant de proposer un changement, consultez la spec du domaine concerné et vérifiez que les tests et le lint passent :
 
-- **Hors ligne et portable** : aucun téléchargement à l'exécution.
-- **Intégrité de l'image** : seule la ROI est modifiée.
-- **L'humain décide** : les heuristiques proposent, l'utilisateur verrouille.
-- **Cœur pur** : `core/` sans Qt, testable sans GUI.
-- **UI jamais bloquée** : workers, progression, annulation.
-- **Rapports graphiques** : `matplotlib` (backend Agg, hors thread UI) pour les rapports audio SVG/PNG.
+```bash
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src/gcstudio/core
+```
 
-## 7. Licence et données
+## Licence
 
-Le dépôt ne doit pas contenir de secrets, de musique ou d'artwork protégé. Les exemples locaux sont hors Git (voir `docs/plan/SPEC_GAPS.md` Q15). Les licences tierces seront documentées dans `THIRD_PARTY_LICENSES.md`.
+La licence du projet n'est pas encore définie.
+
+---
+
+**Vos images et vos audios restent sur votre machine.** Aucun envoi vers un service externe n'est effectué par l'application.
