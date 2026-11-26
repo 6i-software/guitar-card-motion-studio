@@ -23,13 +23,14 @@
 
 | ID | Titre | Rôle | Dépend | Task card |
 |---|---|---|---|---|
+| T-0004 | Contrat grammar v0.2 | spec-analyst | T-0001 (Q3/Q8 tranchées) | `docs/plan/tasks/T-0004-grammar-contract.md` |
 | T-0005 | Lexer | core-dev | T-0004 | `docs/plan/tasks/T-0005-lexer.md` |
 
 ## 4. Bloqué
 
 | ID | Titre | Blocage | Question | Depuis |
 |---|---|---|---|---|
-| T-0004 | Contrat grammar v0.2 | Q3 + Q8 ouvertes (arbitrage humain requis, `human_gate: true`) | Q3 : `¦`/`\|` sans case (motif générique vs marqueur) ; Q8 : compteurs de groupe (`inner`/`outer` vs `group_path`) | 2026-11-26 |
+| — | — | — | — | — |
 
 ## 5. Terminé (7 derniers jours)
 
@@ -45,7 +46,7 @@
 
 | ID | Sujet | Impact | Recommandation |
 |---|---|---|---|
-| Q3 / Q8 | Grammar T-0004 : `¦`/`\|` sans case ; compteurs de groupe | Contrat v0.2, lexer (T-0005) | Q3 : motif générique + `motif_key` stable ; Q8 : `group_path` riche avec `GroupRef` typé |
+| — | — | — | — |
 
 ### Résolues
 
@@ -62,11 +63,12 @@
 | H-0009 | Git workflow | `D6` + `D13` : branche `task/*`, PR, merge commit | 2026-11-25 |
 | H-0010 | Langues/commits | `D14` : docs FR, code/commits EN, gitmoji obligatoire | 2026-11-25 |
 | H-0011 | Force push | `D16` : `git push --force*` / `-f*` en `ask` (confirmation humaine), garde-fous tags/reset conservés | 2026-11-26 |
+| H-0012 | Grammar Q3/Q8 | `D17` + `D18` : `¦`/`\|` = motif générique ; compteurs de groupe via `group_path` riche | 2026-11-26 |
 
 ---
 
 ## 7. Prochaine action
 
 1. Implémenter T-0002 (integrator) et T-0003 (platform-dev) en parallèle ; review + PR + merge commit pour chacune.
-2. Arbitrer Q3/Q8 avec l'humain pour débloquer T-0004 (contrat grammar v0.2), puis lancer T-0005 (lexer).
+2. Lancer T-0004 (spec-analyst) : contrat grammar v0.2 avec Q3 (`D17`) et Q8 (`D18`) tranchées, review `core-dev` + `qa-verifier`, validation humaine.
 3. Détailer W1.1 après la démo M0.

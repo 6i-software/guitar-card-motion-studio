@@ -26,7 +26,7 @@
 ---
 
 ### #Q3 — Sens et rendu visuel de `¦` ou `|` sans numéro de case
-- **Statut :** Ouvert
+- **Statut :** Résolu
 - **Priorité :** P1
 - **Contexte :** spec grammar §2
 - **Question :** Que représente `¦` (arpège) ou `|` (barré) sans numéro de case, et comment l'afficher/s'animer ?
@@ -35,7 +35,7 @@
     2. **Marqueur de structure / séparation** : traitement visuel distinct dans la ROI.
 - **Recommandation :** option 1 pour v1 (motif générique), avec un `motif_key` stable `¦` / `|`.
 - **Impact :** modèle du token, animation ROI, golden.
-- **Décision :** *(à compléter)*
+- **Décision :** `D17` (2026-11-26, arbitrage humain) — **option 1** : motif générique / case non précisée, `motif_key` stable `¦` / `|`.
 
 ---
 
@@ -76,7 +76,7 @@
 ---
 
 ### #Q8 — Compteurs de groupe (`{5A BB}x2`)
-- **Statut :** Bloquant
+- **Statut :** Résolu
 - **Priorité :** P0
 - **Contexte :** `Occurrence` ne porte que `repetition_index/total` et `group_path`.
 - **Question :** comment représenter à la fois les 5 pips de `5A` et les 2 pips de `x2` ?
@@ -85,7 +85,7 @@
     2. **Champs dédiés** : `inner_repetition`, `outer_repetition`.
 - **Recommandation :** option 1, avec un `GroupRef` typé.
 - **Impact :** `Occurrence`, UI, chapitres YouTube.
-- **Décision :** *(à compléter)*
+- **Décision :** `D18` (2026-11-26, arbitrage humain) — **option 1** : `group_path` riche, `GroupRef` typé avec `repetition_index/total`, UI sur le groupe le plus interne.
 
 ---
 
